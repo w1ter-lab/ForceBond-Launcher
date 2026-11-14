@@ -33,3 +33,16 @@ This repository distributes the launcher. You need your own Steam copy of KOTOR 
 - [Support Syndicate Corp. on Patreon](https://www.patreon.com/cw/syndicate_corp)
 
 *Force Bond is an independent community project by Syndicate Corp.*
+
+## Build from source
+
+On Windows with the .NET 10 SDK, run:
+
+```powershell
+dotnet build Launcher/ForceBond.Launcher.csproj
+dotnet build Updater/ForceBond.Updater.csproj
+```
+
+The source export includes the Windows launcher and updater. The game engine and game files are distributed separately. Discord authorization and automatic updates are disabled in source builds by default. The official launcher downloads are configured for the official update service.
+
+The launcher and updater source code is licensed under MIT. Project artwork, logos, and third-party marks are excluded from that license.

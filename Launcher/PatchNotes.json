@@ -1,0 +1,62 @@
+[
+  {
+    "date": "2026-11-14",
+    "version": "0.4.9",
+    "entries": [
+      {
+        "ru": "Кнопка входа через Discord блокируется после авторизации. Улучшено сглаживание движения у гостя и восстановление позы после смены экипировки. Обновлена обработка анимации в сцене морга.",
+        "uk": "Кнопка входу через Discord блокується після авторизації. Покращено згладжування руху в гостя та відновлення пози після зміни спорядження. Оновлено обробку анімації в сцені моргу.",
+        "en": "Disable Discord sign-in while signed in. Improve guest movement smoothing and restore animation after equipment changes. Adjust staged animation handling in the morgue scene.",
+        "kind": "fixed"
+      },
+      {
+        "ru": "Показ задержки до хоста в HUD гостя.",
+        "uk": "Показ затримки до хоста в HUD гостя.",
+        "en": "Show host latency on the guest HUD.",
+        "kind": "added"
+      }
+    ]
+  },
+  {
+    "version": "0.4.8",
+    "entries": [
+      {
+        "kind": "fixed",
+        "uk": "Оновлено звуки кроків і бою в гостя, синхронізацію дверей під час входу, резервну позу в катсценах та імпорт списку модів Steam Workshop.",
+        "ru": "Обновлены звуки шагов и боя у гостя, синхронизация дверей при входе, запасная поза в катсценах и импорт списка модов Steam Workshop.",
+        "en": "Updated guest footsteps and combat audio, initial door synchronization, cutscene pose fallback, and missing Steam Workshop mod handling."
+      }
+    ],
+    "date": "2026-11-13"
+  },
+  {
+    "version": "0.4.7",
+    "date": "2026-11-13",
+    "entries": [
+      {
+        "kind": "fixed",
+        "uk": "Увімкнено оригінальні ролики та оновлено відновлення звуку в гостя після відтворення.",
+        "ru": "Включены оригинальные ролики и обновлено восстановление звука у гостя после воспроизведения.",
+        "en": "Enabled original in-game movies and updated guest audio handling after playback."
+      },
+      {
+        "kind": "added",
+        "uk": "Додано перший етап російського перекладу ігрових меню.",
+        "ru": "Добавлен первый этап русского перевода игровых меню.",
+        "en": "Added initial Russian translations for game menus."
+      }
+    ]
+  },
+  {
+    "version": "0.4.6",
+    "date": "2026-11-12",
+    "entries": [
+      {
+        "kind": "testing",
+        "en": "Closed beta testing has begun.",
+        "uk": "Закрите бета-тестування розпочалося.",
+        "ru": "Закрытое бета-тестирование началось."
+      }
+    ]
+  }
+]

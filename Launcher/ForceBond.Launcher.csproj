@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ApplicationIcon>Assets\force-bond.ico</ApplicationIcon>
+    <AssemblyName>ForceBond</AssemblyName>
+    <RootNamespace>ForceBond.Launcher</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>x86</PlatformTarget>
+    <Version>0.4.9</Version>
+    <InformationalVersion>0.4.9-closed-beta.20261114</InformationalVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Updates\UpdateFiles.cs" Link="UpdateFiles.cs" />
+    <EmbeddedResource Include="..\Access\access-service.json" LogicalName="ForceBond.AccessService" />
+    <EmbeddedResource Include="..\Access\access-policy.json" LogicalName="ForceBond.AccessPolicy" />
+    <EmbeddedResource Include="..\Updates\update-source.json" LogicalName="ForceBond.UpdateSource" />
+    <EmbeddedResource Include="Assets\force-bond.ico" LogicalName="ForceBond.Launcher.force-bond.ico" />
+    <EmbeddedResource Include="Assets\force-bond.png" LogicalName="ForceBond.Launcher.force-bond.png" />
+    <EmbeddedResource Include="Assets\legacy-files.json" LogicalName="ForceBond.LegacyFiles" />
+    <EmbeddedResource Include="PatchNotes.json" LogicalName="ForceBond.Launcher.PatchNotes.json" />
+    <EmbeddedResource Include="Assets\discord-logo.png" LogicalName="ForceBond.Launcher.discord-logo.png" />
+    <EmbeddedResource Include="Assets\patreon-logo.png" LogicalName="ForceBond.Launcher.patreon-logo.png" />
+    <EmbeddedResource Include="Assets\peragus-backdrop.jpg" LogicalName="ForceBond.Launcher.peragus-backdrop.jpg" />
+  </ItemGroup>
+<ItemGroup><Compile Include="..\Updates\CacheMaintenance.cs" Link="CacheMaintenance.cs" /></ItemGroup>
+</Project>
+
