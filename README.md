@@ -45,4 +45,4 @@ dotnet build Updater/ForceBond.Updater.csproj
 
 The source export includes the Windows launcher and updater. The game engine and game files are distributed separately. Discord authorization and automatic updates are disabled in source builds by default. The official launcher downloads are configured for the official update service.
 
-The launcher and updater source code is licensed under MIT. Project artwork, logos, and third-party marks are excluded from that license.
+The launcher and updater source code is licensed under [GPL-3.0-only](LICENSE). Project artwork, logos, and third-party marks are excluded from that license.
