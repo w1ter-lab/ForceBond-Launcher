@@ -17,7 +17,7 @@ internal static class Program
     private static void Main(string[] args)
     {
         LauncherWindowIcon.SetApplicationIdentity();
-        if (LauncherUpdates.Redirect(args)) return;
+        if (!SessionProgress.RoleplayAccess && LauncherUpdates.Redirect(args)) return;
         if (!args.Any(a => a.StartsWith("--preview", StringComparison.Ordinal)) && Environment.ProcessPath is string executable)
             try { DiscordLaunch.Register(executable); }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException)
@@ -129,14 +129,15 @@ internal sealed class LauncherForm : Form
         Shown += async (_, _) =>
         {
             RefreshEnvironment();
-            LauncherUpdates.Acknowledge(Environment.GetCommandLineArgs());
+            if (!SessionProgress.RoleplayAccess) LauncherUpdates.Acknowledge(Environment.GetCommandLineArgs());
             if (!Environment.GetCommandLineArgs().Any(a => a.StartsWith("--preview", StringComparison.Ordinal)))
             {
                 _working = true; _playButton.Enabled = false;
-                if (!discordLaunch) {
+                if (!discordLaunch && !SessionProgress.RoleplayAccess) {
                     if (LauncherUpdates.Source.Enabled) SetStatus("Checking for updates...", Teal);
                     await LauncherUpdates.CheckAsync(this, _shutdown.Token);
                 }
+
                 _accessButton.Visible = !BetaAccess.PublicMode;
                 if (IsDisposed) return;
                 _working = false;
@@ -228,7 +229,8 @@ internal sealed class LauncherForm : Form
         _accessButton.Font = new Font("Segoe UI", 8, FontStyle.Bold);
         _accessButton.Click += async (_, _) => {
             using var dialog = new BetaAccessWindow(); dialog.ShowDialog(this);
-            if(dialog.CheckForUpdates)await LauncherUpdates.CheckAsync(this, _shutdown.Token);
+
+            if(dialog.CheckForUpdates && !SessionProgress.RoleplayAccess)await LauncherUpdates.CheckAsync(this, _shutdown.Token);
             if(!IsDisposed)_accessButton.Visible = !BetaAccess.PublicMode;
         };
         header.Controls.Add(_accessButton);
@@ -322,9 +324,23 @@ internal sealed class LauncherForm : Form
 
         var infoCard = MakeCard(new Point(614, 185), new Size(354, 282));
         infoCard.Controls.Add(MakeSectionLabel("HOW TO CONNECT", new Point(22, 18)));
-        AddStep(infoCard, "01", "START THE GAME", "Load your character or a save. Steam hosting starts when the world is ready.", 58);
-        AddStep(infoCard, "02", "INVITE A FRIEND", "Invite or join your friend through Steam Friends.", 132);
-        AddStep(infoCard, "03", "JOIN THE SESSION", "Accept the invite while KOTOR II is running.", 206);
+        var primary = AddConnectionPanel(infoCard, 53);
+        var secondary = AddConnectionPanel(infoCard, 162);
+        void UpdateConnectionGuide()
+        {
+            bool roleplay = _sessionProgress.GuideMode == "roleplay";
+            primary.Title.Text = roleplay ? "OFFICIAL SERVER" : "HOST A SESSION";
+            primary.Body.Text = roleplay
+                ? "From the main menu, choose Force Bond Hard RolePlay to join the official server."
+                : "Load your save in Force Bond, then press F8 to invite friends through Steam.";
+            secondary.Title.Text = roleplay ? "BROWSE SERVERS" : "JOIN A FRIEND";
+            secondary.Body.Text = roleplay
+                ? "Open Server Browser from the main menu, choose a server, and connect."
+                : "Stay at the Force Bond main menu and accept your friend's Steam invite.";
+            RefreshRoleplayLaunchState();
+        }
+        _sessionProgress.GuideChanged += UpdateConnectionGuide;
+        UpdateConnectionGuide();
         content.Controls.Add(infoCard);
 
         _status.Text = "Ready when you are. Steam Overlay handles the invite in game.";
@@ -348,14 +364,14 @@ internal sealed class LauncherForm : Form
         footer.Controls.Add(new Label
         {
             Text = "ONE PARTY. ONE GALACTIC JOURNEY.",
-            AutoSize = true, ForeColor = MutedText, Font = new Font("Segoe UI", 8f, FontStyle.Bold),
-            Location = new Point(0, 12), BackColor = Color.Transparent
+            AutoSize = false, ForeColor = MutedText, Font = new Font("Segoe UI", 8f, FontStyle.Bold),
+            Location = new Point(0, 8), Size = new Size(258, 30), BackColor = Color.Transparent
         });
         footer.Controls.Add(new Label
         {
             Text = $"Build {BuildVersion.Split('-')[0]}  /  {L.T("Closed Beta")}",
             AutoSize = false, ForeColor = Color.FromArgb(99, 119, 114), Font = new Font("Segoe UI", 8f),
-            Location = new Point(0, 34), Size = new Size(258, 16), AutoEllipsis = true, BackColor = Color.Transparent
+            Location = new Point(0, 40), Size = new Size(258, 16), AutoEllipsis = true, BackColor = Color.Transparent
         });
         AddFooterAction(footer, "MOD MANAGER", 268, 126, ShowMods);
         AddFooterAction(footer, "SETTINGS", 400, 104, ShowSettings);
@@ -414,6 +430,8 @@ internal sealed class LauncherForm : Form
         ResolveInstallation();
         if (_gamePath is null) throw new InvalidOperationException("KOTOR II was not found. Use Change Game Folder to select its installation folder.");
         if (AnyGameProcess()) throw new InvalidOperationException("Close KOTOR II before verifying files.");
+        if (OdysseyEngine.Enabled && !OdysseyEngine.Available)
+            throw new InvalidOperationException(L.T("Engine not installed. Open Beta Access, sign in and check for updates to download it."));
         _working = true; _repairingResources = true; _playButton.Enabled = false;
         string path = _gamePath;
         try
@@ -431,6 +449,8 @@ internal sealed class LauncherForm : Form
         if (_working || IsDisposed || !_startupComplete) return;
         ResolveInstallation();
         if (_gamePath is null) return;
+        // A public bootstrap launcher has no engine until its first authorized download.
+        if (OdysseyEngine.Enabled && !OdysseyEngine.Available) return;
         _verificationRequired = VerifiedGameResources.NeedsVerification(LauncherSettings.DataDirectory, BuildVersion, _gamePath);
         if (!_verificationRequired) return;
         if (!string.Equals(_verificationAttemptPath, _gamePath, StringComparison.OrdinalIgnoreCase)) _verificationError = null;
@@ -568,25 +588,33 @@ internal sealed class LauncherForm : Form
         parent.Controls.Add(value);
     }
 
-    private static void AddStep(Control parent, string number, string title, string body, int y)
+    private void RefreshRoleplayLaunchState()
     {
-        var badge = new Label
+        if (_sessionProgress.RoleplayPreview && !SessionProgress.RoleplayAccess) _playButton.Enabled = false;
+        else if (IsHandleCreated) RefreshEnvironment();
+    }
+
+    private static (Label Title, Label Body) AddConnectionPanel(Control parent, int y)
+    {
+        var panel = new Panel
         {
-            Text = number, Location = new Point(22, y), Size = new Size(36, 34),
-            ForeColor = Teal, BackColor = RaisedColor, TextAlign = ContentAlignment.MiddleCenter,
-            Font = new Font("Segoe UI", 9f, FontStyle.Bold)
+            Location = new Point(22, y), Size = new Size(310, 96),
+            BackColor = RaisedColor
         };
-        parent.Controls.Add(badge);
-        parent.Controls.Add(new Label
+        var accent = new Panel { Location = Point.Empty, Size = new Size(3, 96), BackColor = TealDim };
+        var title = new Label
         {
-            Text = title, Location = new Point(70, y - 1), Size = new Size(245, 18),
-            ForeColor = MainText, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold)
-        });
-        parent.Controls.Add(new Label
+            Location = new Point(14, 11), Size = new Size(282, 20),
+            ForeColor = Teal, Font = new Font("Segoe UI", 9f, FontStyle.Bold)
+        };
+        var body = new Label
         {
-            Text = body, Location = new Point(70, y + 19), Size = new Size(252, 44),
-            ForeColor = MutedText, Font = new Font("Segoe UI", 8f)
-        });
+            Location = new Point(14, 34), Size = new Size(282, 54),
+            ForeColor = MainText, Font = new Font("Segoe UI", 9f)
+        };
+        panel.Controls.AddRange([accent, title, body]);
+        parent.Controls.Add(panel);
+        return (title, body);
     }
 
     private StyledButton BuildPlayButton() => new()
@@ -626,13 +654,13 @@ internal sealed class LauncherForm : Form
             _playButton.Text = active
                 ? "GAME RUNNING"
                 : runningProcess is null ? "LAUNCH FORCE BOND" : "CONNECT FORCE BOND";
-            _playButton.Enabled = !_working && !_verificationRequired && !active;
+            _playButton.Enabled = !_working && !_verificationRequired && !active && (!_sessionProgress.RoleplayPreview || SessionProgress.RoleplayAccess);
             _runtimeStatus.Text = _sessionView.RuntimeText;
             _runtimeStatus.ForeColor = _sessionView.Warning ? Gold : Teal;
             if (OdysseyEngine.Enabled && !OdysseyEngine.Available) {
                 _runtimeStatus.Text = "ENGINE FILES MISSING"; _runtimeStatus.ForeColor = Gold;
                 _playButton.Enabled = false;
-                SetStatus("Extract the complete package, including the Engine folder. Do not copy only ForceBond.exe.", Gold);
+                SetStatus("Engine not installed. Open Beta Access, sign in and check for updates to download it.", Gold);
             }
         }
         catch (Exception ex)
@@ -645,7 +673,7 @@ internal sealed class LauncherForm : Form
 
     private async Task LaunchCoopAsync(bool discordLaunch = false)
     {
-        if (_working) return;
+        if (_working || (!discordLaunch && _sessionProgress.RoleplayPreview && !SessionProgress.RoleplayAccess)) return;
         _working = true;
         _playButton.Enabled = false;
         Process? game = null;
@@ -663,6 +691,11 @@ internal sealed class LauncherForm : Form
 
             if (OdysseyEngine.Enabled) {
                 var selected = LauncherSettings.Load();
+                if (!discordLaunch && _sessionProgress.RoleplayPreview)
+                {
+
+                    selected = selected with { Mode = "roleplay" };
+                }
                 if (discordLaunch && !selected.DiscordEnabled)
                     throw new InvalidOperationException("Enable Discord integration in Settings, then accept the invitation again.");
                 var steamProcesses = Process.GetProcessesByName("steam");
@@ -731,7 +764,7 @@ internal sealed class LauncherForm : Form
             if (!IsDisposed && IsHandleCreated)
             {
                 _working = false;
-                _playButton.Enabled = true;
+                _playButton.Enabled = !_sessionProgress.RoleplayPreview || SessionProgress.RoleplayAccess;
                 RefreshEnvironment();
             }
         }

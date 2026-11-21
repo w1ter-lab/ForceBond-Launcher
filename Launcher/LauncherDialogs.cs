@@ -1,4 +1,4 @@
-﻿namespace ForceBond.Launcher;
+namespace ForceBond.Launcher;
 
 internal class UtilityWindow : Form
 {
@@ -60,7 +60,7 @@ internal sealed class SettingsWindow : UtilityWindow
         Controls.Add(borderless);
         Controls.Add(new Label { Text = "Chat, voice and Debug settings apply while the game is running.\nHold the microphone key to talk; double-tap to lock. F8 invites through Steam.", Location = new Point(26, 478), Size = new Size(490, 48), ForeColor = Color.FromArgb(143, 166, 160), Font = new Font("Segoe UI", 8.5f) });
         Caption("Game language", 534);
-        var gameLanguage = ChoiceBox(new[] { new LanguageChoice("en", "English"), new LanguageChoice("ru", "Русский") }, current.GameLanguage, 529);
+        var gameLanguage = ChoiceBox(new[] { new LanguageChoice("en", "English"), new LanguageChoice("ru", "Русский (6,63%)") }, current.GameLanguage, 529);
         gameLanguage.AccessibleName = "Game language";
         var save = MakeButton("SAVE SETTINGS", new Point(334, 681), new Size(180, 36));
         save.Click += (_, _) =>

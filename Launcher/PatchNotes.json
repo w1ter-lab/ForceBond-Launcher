@@ -1,5 +1,221 @@
 [
   {
+    "version": "0.4.20",
+    "date": "2026-11-21",
+    "entries": [
+      {
+        "kind": "fixed",
+        "en": "Fixed co-op movie starts, endings and host skips while gameplay simulation is paused.",
+        "ru": "Исправлены запуск, завершение и пропуск видеороликов у гостя при остановленной игровой симуляции.",
+        "uk": "Виправлено запуск, завершення й пропуск відеороликів у гостя за зупиненої ігрової симуляції."
+      },
+      {
+        "kind": "fixed",
+        "en": "Enabled lab-station crafting and breakdown, including the correct interface and inventory for a guest operating the station.",
+        "ru": "Включены создание и разбор предметов в лабораториях, включая правильный интерфейс и инвентарь гостя при использовании станции.",
+        "uk": "Увімкнено створення й розбирання предметів у лабораторіях, зокрема правильний інтерфейс та інвентар гостя під час використання станції."
+      },
+      {
+        "kind": "fixed",
+        "en": "Implemented story datapad display and script lookup of inventory items. Quest notifications no longer overlap the document.",
+        "ru": "Добавлено чтение сюжетных записок и исправлен поиск предметов в инвентаре из скриптов. Уведомления о заданиях больше не перекрывают документ.",
+        "uk": "Додано читання сюжетних записок і виправлено пошук предметів в інвентарі зі скриптів. Сповіщення про завдання більше не перекривають документ."
+      }
+    ]
+  },
+  {
+    "entries": [
+      {
+        "ru": "Исправлены отображение запаса Силы у гостя и его естественное восстановление.",
+        "kind": "fixed",
+        "en": "Fixed guest Force-point display and natural Force-point recovery.",
+        "uk": "Виправлено відображення запасу Сили у гостя та його природне відновлення."
+      },
+      {
+        "ru": "Групповые способности Силы теперь учитывают гостей и NPC-компаньонов. Расширен перебор союзников в оригинальных скриптах KOTOR II для групп Story+ больше трёх участников.",
+        "kind": "fixed",
+        "en": "Group Force powers now include guest characters and NPC companions. Expanded the original KOTOR II group loops beyond three allies for larger Story+ groups.",
+        "uk": "Групові здібності Сили тепер враховують гостей і NPC-компаньйонів. Розширено перебір союзників в оригінальних скриптах KOTOR II для груп Story+ понад трьох учасників."
+      },
+      {
+        "ru": "Лаунчер повторяет запросы при временных ошибках HTTP 502, 503 и 504 и записывает ошибки обновления в журнал. Исправлена первая установка движка при совпадении версии отдельного лаунчера и пакета.",
+        "kind": "fixed",
+        "en": "The launcher retries temporary HTTP 502, 503 and 504 responses and logs update failures. Fixed initial engine installation when the standalone launcher and latest package have the same version.",
+        "uk": "Лаунчер повторює запити за тимчасових помилок HTTP 502, 503 і 504 та записує помилки оновлення в журнал. Виправлено перше встановлення рушія за однакових версій окремого лаунчера й пакета."
+      },
+      {
+        "ru": "Проверены 33 боевые способности у хоста и гостя. Лечение, Доблесть и Боевая медитация также проверены на четырёх союзниках. Проверены не все способности и ситуации: воскрешение, контроль разума и оставшиеся личные усиления ещё требуют проверки.",
+        "kind": "testing",
+        "en": "Checked 33 combat powers with both host and guest. Heal, Valor and Battle Meditation were also checked on four allies. Not every power or scenario is verified: Revitalise, mind-control powers and remaining personal-power families still need testing.",
+        "uk": "Перевірено 33 бойові здібності у хоста й гостя. Лікування, Доблесть і Бойову медитацію також перевірено на чотирьох союзниках. Перевірено не всі здібності й ситуації: воскресіння, контроль розуму та решта особистих підсилень ще потребують перевірки."
+      },
+      {
+        "ru": "Обновиться должны все игроки сессии: изменён сетевой протокол.",
+        "kind": "changed",
+        "en": "All players in a session must install this update; the network protocol has changed.",
+        "uk": "Оновитися мають усі гравці сесії: змінено мережевий протокол."
+      }
+    ],
+    "date": "2026-11-20",
+    "version": "0.4.19"
+  },
+  {
+    "entries": [
+      {
+        "ru": "Исправлен общий запуск и выбор целей способностей Силы, включая отсутствовавшие в HUD активные способности и отмену из-за предыдущей ошибки перемещения.",
+        "kind": "fixed",
+        "uk": "Виправлено спільний запуск і вибір цілей здібностей Сили, зокрема відсутні в HUD активні здібності та скасування через попередню помилку руху.",
+        "en": "Fixed the shared Force-power activation and targeting path, including active powers missing from the HUD and stale navigation failures."
+      },
+      {
+        "ru": "Добавлено сообщение о нехватке очков Силы. Stun Droid проверена у хоста и гостя; также проверены Force Push и Speed. Не все способности проверены отдельно: могут потребоваться дальнейшие исправления эффектов и синхронизации.",
+        "kind": "fixed",
+        "uk": "Додано повідомлення про нестачу очок Сили. Stun Droid перевірено у хоста й гостя; також перевірено Force Push і Speed. Не всі здібності перевірено окремо: можуть знадобитися подальші виправлення ефектів і синхронізації.",
+        "en": "Added feedback for insufficient Force points. Stun Droid was checked for host and guest; Force Push and Speed were also checked. Not every Force power has been individually tested; further effect and synchronization fixes may still be needed."
+      },
+      {
+        "ru": "Исправлено состояние разблокировки аварийного люка на Перагусе после эпизода с T3.",
+        "kind": "fixed",
+        "uk": "Виправлено стан розблокування аварійного люка на Перагусі після епізоду з T3.",
+        "en": "Fixed the Peragus emergency hatch unlock state after the T3 sequence."
+      },
+      {
+        "ru": "Исправлены взлом дверей атакой у гостя и подход к телам для сбора добычи.",
+        "kind": "fixed",
+        "uk": "Виправлено злам дверей атакою у гостя та підхід до тіл для збору здобичі.",
+        "en": "Fixed guest door bashing and approaching corpses to loot them."
+      },
+      {
+        "ru": "Улучшена обработка кнопки боевого поведения у гостя и добавлены резервные названия для предметов с пустой подписью.",
+        "kind": "fixed",
+        "uk": "Поліпшено обробку кнопки бойової поведінки у гостя та додано резервні назви предметів із порожнім підписом.",
+        "en": "Improved guest combat-script button handling and fallback names for empty item labels."
+      }
+    ],
+    "date": "2026-11-19",
+    "version": "0.4.18"
+  },
+  {
+    "date": "2026-11-18",
+    "version": "0.4.17",
+    "entries": [
+      {
+        "kind": "fixed",
+        "en": "Guest portraits now take priority in the Story HUD.",
+        "ru": "Портреты гостей теперь имеют приоритет в HUD режима Story.",
+        "uk": "Портрети гостей тепер мають пріоритет в HUD режиму Story."
+      },
+      {
+        "kind": "fixed",
+        "en": "Damaging grenades now damage destructible doors on direct hits.",
+        "ru": "Боевые гранаты теперь повреждают разрушаемые двери при прямом попадании.",
+        "uk": "Бойові гранати тепер пошкоджують руйнівні двері при прямому влучанні."
+      },
+      {
+        "kind": "fixed",
+        "en": "Removed Story session rules from the Roleplay card.",
+        "ru": "Убраны правила Story из карточки Roleplay.",
+        "uk": "Прибрано правила Story з картки Roleplay."
+      }
+    ]
+  },
+  {
+    "date": "2026-11-15",
+    "version": "0.4.16",
+    "entries": [
+      {
+        "ru": "Уточнены шаги подключения через Steam для Story и Story+. Во вкладке Roleplay показано подключение через браузер серверов.",
+        "kind": "added",
+        "en": "Clarified the Steam invite steps for Story and Story+. The Roleplay tab previews how to join through Server Browser.",
+        "uk": "Уточнено кроки підключення через Steam для Story і Story+. На вкладці Roleplay показано підключення через браузер серверів."
+      }
+    ]
+  },
+  {
+    "version": "0.4.15",
+    "entries": [
+      {
+        "kind": "fixed",
+        "en": "Fixed host character visibility on initial join, movement while downed, and God Mode. Updated the Steam invite instructions and Russian HUD, F7 menu, and chat input.",
+        "ru": "Исправлены появление хоста при подключении, движение павших и бессмертие. Обновлены инструкции подключения, русский HUD, F7 и ввод в чате.",
+        "uk": "Виправлено появу хоста, рух полеглих і безсмертя. Оновлено інструкції підключення, російський HUD, F7 і введення в чаті."
+      }
+    ],
+    "date": "2026-11-15"
+  },
+  {
+    "version": "0.4.14",
+    "date": "2026-11-14",
+    "entries": [
+      {
+        "ru": "Повтор в Freecam записывает открытие и закрытие дверей.",
+        "en": "Freecam replay now records door opening and closing.",
+        "uk": "Повтор у Freecam записує відкриття та закриття дверей.",
+        "kind": "added"
+      },
+      {
+        "ru": "Русский перевод охватывает 6,63% текстовых записей базовой игры.",
+        "en": "Expanded Russian text localization to 6.63% of base game text entries.",
+        "uk": "Російський переклад охоплює 6,63% текстових записів базової гри.",
+        "kind": "added"
+      }
+    ]
+  },
+  {
+    "date": "2026-11-14",
+    "version": "0.4.13",
+    "entries": [
+      {
+        "en": "Added movement recording and Freecam replay in the host F7 Recording tab.",
+        "uk": "У меню F7 хоста додано вкладку запису руху та повтору у Freecam.",
+        "ru": "В меню F7 хоста добавлена вкладка записи движения и повтора в Freecam.",
+        "kind": "added"
+      }
+    ]
+  },
+  {
+    "date": "2026-11-14",
+    "entries": [
+      {
+        "en": "Added Freecam and God Mode to the host F7 menu.",
+        "kind": "added",
+        "ru": "В меню F7 хоста добавлены Freecam и God Mode.",
+        "uk": "У меню F7 хоста додано Freecam і God Mode."
+      },
+      {
+        "en": "Co-op defeat now accounts for guest characters. Fallen party members recover at 1 HP after combat.",
+        "kind": "fixed",
+        "ru": "При поражении группы учитываются гостевые персонажи. Павшие встают после боя с 1 HP.",
+        "uk": "Під час поразки групи враховуються гостьові персонажі. Полеглі встають після бою з 1 HP."
+      }
+    ],
+    "version": "0.4.12"
+  },
+  {
+    "date": "2026-11-14",
+    "entries": [
+      {
+        "kind": "improved",
+        "en": "Expanded Russian game localization and added translation progress to the language picker.",
+        "ru": "Расширен русский перевод игры. В настройках показан процент переведённых строк.",
+        "uk": "Розширено російський переклад гри. У налаштуваннях показано відсоток перекладених рядків."
+      }
+    ],
+    "version": "0.4.11"
+  },
+  {
+    "date": "2026-11-14",
+    "entries": [
+      {
+        "uk": "Оновлено анімацію сцени в морзі та згладжування руху в гостя.",
+        "ru": "Обновлены анимация сцены в морге и сглаживание движения у гостя.",
+        "kind": "fixed",
+        "en": "Updated the morgue cutscene animation and guest movement smoothing."
+      }
+    ],
+    "version": "0.4.10"
+  },
+  {
     "date": "2026-11-14",
     "version": "0.4.9",
     "entries": [

@@ -33,11 +33,10 @@ internal static class OdysseyEngine
         var start = new ProcessStartInfo(Executable) { WorkingDirectory = profile, UseShellExecute = false, CreateNoWindow = true, WindowStyle = headlessCheck ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal };
         foreach (string arg in new[] { "--game", gamePath, "--steam", "1", "--coop-mode", settings.EngineMode,
             "--hud", "k2", "--forcebond-settings", LauncherSettings.FilePath, "--forcebond-debug-menu", settings.DebugMenuEnabled ? "1" : "0", "--run-unfocused", "1" }) start.ArgumentList.Add(arg);
+        start.Environment["FORCEBOND_ROLEPLAY_MENU"] = !headlessCheck && settings.Mode == "roleplay" ? "1" : "0";
         start.Environment.Remove("FORCEBOND_RUSSIAN_LOCALIZATION");
         start.Environment["FORCEBOND_GAME_LANGUAGE"] = settings.GameLanguage == "ru" ? "ru" : "en";
-        start.Environment.Remove("FORCEBOND_LOCALIZATION_ROOT");
-        if (settings.GameLanguage == "ru")
-            start.Environment["FORCEBOND_LOCALIZATION_ROOT"] = Path.Combine(DirectoryPath, "Localization", "ru");
+        start.Environment["FORCEBOND_LOCALIZATION_ROOT"] = Path.Combine(DirectoryPath, "Localization", "ru");
         if (!headlessCheck)
         {
             var mods = ModLibrary.Load(gamePath);

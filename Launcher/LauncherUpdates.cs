@@ -70,14 +70,19 @@ internal static class LauncherUpdates
         try
         {
             using var client = Client();
-            using var deadline = CancellationTokenSource.CreateLinkedTokenSource(cancellation); deadline.CancelAfter(TimeSpan.FromSeconds(7));
+            using var deadline = CancellationTokenSource.CreateLinkedTokenSource(cancellation); deadline.CancelAfter(TimeSpan.FromSeconds(90));
             await BetaAccess.Configuration(deadline.Token);
             if (!BetaAccess.PublicMode && BetaAccess.Session() is null) { Log("DISCORD_SIGN_IN_REQUIRED_FOR_UPDATES"); return; }
+            deadline.CancelAfter(TimeSpan.FromSeconds(90));
             byte[] bytes = await GetLimited(client, BetaAccess.ManifestUrl, 4 * 1024 * 1024, deadline.Token);
             var signed = JsonSerializer.Deserialize<SignedRelease>(bytes, UpdateFiles.Json) ?? throw new IOException("Empty update response.");
             var manifest = UpdateFiles.Verify(signed, Source.PublicKeyPem);
             var current = typeof(LauncherUpdates).Assembly.GetName().Version!;
-            if (UpdateFiles.VersionOf(manifest.Version) <= current) return;
+            var offered = UpdateFiles.VersionOf(manifest.Version);
+            offered = new Version(offered.Major, offered.Minor, offered.Build, Math.Max(0, offered.Revision));
+            // A Workshop bootstrap has a launcher version but no engine payload yet.
+            // Permit installing that same release; never offer an older release.
+            if (offered < current || (offered == current && OdysseyEngine.Available)) return;
             if (owner.IsDisposed || cancellation.IsCancellationRequested) return;
             using var dialog = new UpdateWindow(manifest, signed);
             dialog.ShowDialog(owner);

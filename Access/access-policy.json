@@ -1,1 +1,21 @@
-{}
+{
+  "schema": 1,
+  "releaseMode": "closed-beta",
+  "guildId": "1424702636170547213",
+  "allowedRoles": [
+    {
+      "id": "1462397042046271612",
+      "name": "Playtester"
+    },
+    {
+      "id": "1424707269500600320",
+      "name": "Syndicate Corp."
+    }
+  ],
+  "allowInstalledBuildLaunch": true,
+  "notices": {
+    "en": "Discord sign-in is required to download closed-beta builds and updates. This requirement is temporary: when Force Bond becomes publicly available, sign-in will be removed and everyone will be able to download and play. Builds you have already downloaded remain playable if your beta access ends.",
+    "uk": "Для завантаження збірок закритої бети та оновлень потрібен вхід через Discord. Це тимчасова вимога: після відкриття публічного доступу до Force Bond авторизацію буде прибрано, і всі зможуть завантажувати мод та грати. Уже завантажені збірки залишаться доступними для гри після завершення бета-доступу.",
+    "ru": "Для скачивания сборок закрытой беты и обновлений нужен вход через Discord. Это временное требование: после открытия публичного доступа к Force Bond авторизация будет убрана, и все смогут скачивать мод и играть. Уже скачанные сборки останутся доступны для игры после окончания бета-доступа."
+  }
+}

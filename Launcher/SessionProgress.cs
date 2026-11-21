@@ -1,4 +1,4 @@
-﻿using System.Drawing.Drawing2D;
+using System.Drawing.Drawing2D;
 
 namespace ForceBond.Launcher;
 
@@ -10,7 +10,15 @@ internal sealed class SessionProgress : Control
     private float _fade = 1;
     private readonly StyledButton _story = new() { Text = "Story", Location = new Point(18, 103), Size = new Size(74, 30) };
     private readonly StyledButton _storyPlus = new() { Text = "Story+", Location = new Point(100, 103), Size = new Size(74, 30) };
-    private readonly StyledButton _futureMode = new() { Text = "Roleplay", Location = new Point(182, 103), Size = new Size(84, 30), Enabled = false, ForeColor = Color.Gray };
+    private readonly StyledButton _futureMode = new() { Text = "Roleplay", Location = new Point(182, 103), Size = new Size(84, 30) };
+#if FORCEBOND_ROLEPLAY_DEV
+    public static bool RoleplayAccess => true;
+#else
+    public static bool RoleplayAccess => false;
+#endif
+    public bool RoleplayPreview { get; private set; }
+    public string GuideMode => RoleplayPreview ? "roleplay" : _selectedMode;
+    public event Action? GuideChanged;
     private string _selectedMode = "story";
 
     public SessionProgress()
@@ -20,6 +28,7 @@ internal sealed class SessionProgress : Control
         _selectedMode = LauncherSettings.Load().Mode;
         _story.Click += (_, _) => SaveMode("story");
         _storyPlus.Click += (_, _) => SaveMode("story+");
+        _futureMode.Click += (_, _) => { RoleplayPreview = true; UpdateModeButtons(); Invalidate(); GuideChanged?.Invoke(); };
         Controls.Add(_story); Controls.Add(_storyPlus); Controls.Add(_futureMode);
         UpdateModeButtons();
         _animation.Tick += (_, _) => { _fade = Math.Min(1, _fade + .1f); Invalidate(); if (_fade >= 1) _animation.Stop(); };
@@ -27,23 +36,25 @@ internal sealed class SessionProgress : Control
     public void UpdateState(SessionView view, SessionState? state = null)
     {
         if (_view.RuntimeText != view.RuntimeText) { _fade = .2f; _animation.Start(); }
+        var previousGuide = GuideMode;
         _view = view; _state = state;
         _selectedMode = state?.Text("RuntimeEngine") == "OdysseyMP" ? LauncherSettings.NormalizeMode(state.Text("Mode")) : LauncherSettings.Load().Mode;
         _story.Enabled = _storyPlus.Enabled = !view.Steps[0];
         UpdateModeButtons();
+        if (previousGuide != GuideMode) GuideChanged?.Invoke();
         AccessibleDescription = L.T(view.Description); Invalidate();
     }
     private void SaveMode(string mode)
     {
         try {
             (LauncherSettings.Load() with { Mode = mode }).Save();
-            _selectedMode = mode; UpdateModeButtons(); Invalidate();
+            _selectedMode = mode; RoleplayPreview = false; UpdateModeButtons(); Invalidate(); GuideChanged?.Invoke();
         } catch (Exception ex) { MessageBox.Show(this, ex.Message, L.T("Could not save settings")); }
     }
     private void UpdateModeButtons()
     {
-        foreach (var (button, mode) in new[] { (_story, "story"), (_storyPlus, "story+") }) {
-            bool selected = _selectedMode == mode;
+        foreach (var (button, mode) in new[] { (_story, "story"), (_storyPlus, "story+"), (_futureMode, "roleplay") }) {
+            bool selected = GuideMode == mode;
             button.FillColor = selected ? Color.FromArgb(22, 63, 58) : Color.FromArgb(12, 30, 31);
             button.BorderColor = selected ? Color.FromArgb(48, 210, 181) : Color.FromArgb(24, 113, 102);
             button.ForeColor = Color.FromArgb(48, 210, 181);
@@ -74,8 +85,12 @@ internal sealed class SessionProgress : Control
         TextRenderer.DrawText(g, L.T(title), heading, new Rectangle(18, 18, Width - 36, 30), _view.Warning ? gold : Color.FromArgb((int)(150 + 78 * _fade), 229, 215), TextFormatFlags.EndEllipsis);
         TextRenderer.DrawText(g, L.T(LocationName(_state?.Text("Module") ?? "")), Font, new Rectangle(18, 53, Width - 36, 24), muted, TextFormatFlags.EndEllipsis);
         g.DrawLine(border, 18, 89, Width - 18, 89);
-        TextRenderer.DrawText(g, L.T(_selectedMode == "story+" ? "Up to 8 players per session" : "Up to 3 players per session"), Font, new Rectangle(276, 108, Width - 294, 22), gold, TextFormatFlags.EndEllipsis);
-        TextRenderer.DrawText(g, L.T(_selectedMode == "story+" ? "Own characters · Personal inventory" : "Host's companions · Shared inventory"), Font, new Rectangle(18, 140, Width - 36, 24), white, TextFormatFlags.EndEllipsis);
+        if (RoleplayPreview) return;
+        if (GuideMode != "roleplay")
+        {
+            TextRenderer.DrawText(g, L.T(_selectedMode == "story+" ? "Up to 8 players per session" : "Up to 3 players per session"), Font, new Rectangle(276, 108, Width - 294, 22), gold, TextFormatFlags.EndEllipsis);
+            TextRenderer.DrawText(g, L.T(_selectedMode == "story+" ? "Own characters · Personal inventory" : "Host's companions · Shared inventory"), Font, new Rectangle(18, 140, Width - 36, 24), white, TextFormatFlags.EndEllipsis);
+        }
     }
     protected override void Dispose(bool disposing) { if (disposing) { _animation.Dispose(); } base.Dispose(disposing); }
 }

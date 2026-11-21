@@ -10,8 +10,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PlatformTarget>x86</PlatformTarget>
-    <Version>0.4.9</Version>
-    <InformationalVersion>0.4.9-closed-beta.20261114</InformationalVersion>
+    <Version>0.4.20</Version>
+    <InformationalVersion>0.4.20-closed-beta.20261121</InformationalVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\Updates\UpdateFiles.cs" Link="UpdateFiles.cs" />
@@ -28,4 +28,5 @@
   </ItemGroup>
 <ItemGroup><Compile Include="..\Updates\CacheMaintenance.cs" Link="CacheMaintenance.cs" /></ItemGroup>
 </Project>
+
 

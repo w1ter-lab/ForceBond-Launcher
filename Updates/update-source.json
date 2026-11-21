@@ -1,1 +1,4 @@
-{"ManifestUrl":"","PublicKeyPem":""}
+{
+  "ManifestUrl": "https://github.com/w1ter-lab/ForceBond-Releases/releases/latest/download/update.json",
+  "PublicKeyPem": "-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAqCajAPKT5p8nQ3lEiyoJ\nHpqRhEt0uLXxgWq7MB647zIU/MZ6EBJCEHlT0btuMG0Sqhj69PYy03AuEWyvZb/P\nTJaj6PjKeZW2WhgTyJ16kdOebxouUytJ3NyCkQrGZYj571F2oTL7i8bFDGfc7qqF\naQUwTS0U3hN6WnurD/8p3eusqXp+xTkgOmcabO+Pkvliw2KNVnTkIzCWLnYYfBsX\nH5iV6WdKj1lDTIjWrOVhjGOzLQ41AdbNYLIpQzW0Aqd6wQRnUPb4CiFXV/SXeN77\nQprpAZUNgJh9jfC5wu7tl9uTsZCHrQ64i5jMQnzeCPTxB7leRo/UEGu/tOP6nGFi\n2D8XZfDnu48Go2wEsMYKEh4rgYh/FAT48IGmmv+5ByxE7GnAfMF70VzrIRfioLYK\npNkqoW8Oc5Xm2bSKd5+LJ7iLIdQmzlpnQslodoh+TsX451xraJirdn369TC0FTFO\nNtz82lC6d9VAGV1LAUd7qU+QkIk9lPGHdi5LchjRv9WpAgMBAAE=\n-----END PUBLIC KEY-----"
+}
